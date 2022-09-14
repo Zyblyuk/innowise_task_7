@@ -22,6 +22,6 @@ alerts.data = alerts.data[
 
 alerts.anything_to_datetime('sdk_date')
 
-alerts.send_alerts_by_rules("sdk_date", "minute", 100)
+alerts.send_alerts_by_rules("sdk_date", "minute", -100)
 alerts.send_alerts_by_rules("sdk_date", "hour", 10, 'bundle_id', "com.pregnantcatemma.virtualpet")
 alerts.send_alerts_by_rules("sdk_date", "day", 300)

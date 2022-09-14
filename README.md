@@ -39,6 +39,7 @@ alerts.data = alerts.data[
 который может конвертировать любой формат строк
 
 ```
+
 alerts.anything_to_datetime('sdk_date')
 ```
 
@@ -71,5 +72,5 @@ alerts.send_alerts_by_rules("sdk_date", "hour", 10, 'bundle_id', "com.pregnantca
 # Оповещение о более чем 300 фатальных ошибках менее чем за один час день:
 alerts.send_alerts_by_rules("sdk_date", "day", 300)
 ```
-
 Использование класса облегчено сознание новых правил
+или прям все поля вывесли у каждой ошибки 

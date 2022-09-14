@@ -1,5 +1,8 @@
 import pandas as pd
 from pandas import DataFrame
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 
 class BugCatcherByRule:
@@ -18,7 +21,6 @@ class BugCatcherByRule:
                                 names=self.columns_name,
                                 low_memory=False)
 
-        print(len(self.data))
         # drop the first line because this line doesn't make sense
         self.data.drop(index=self.data.index[0], inplace=True)
 
@@ -60,7 +62,8 @@ class BugCatcherByRule:
 
         data_where: DataFrame
         if date_column not in self.data.columns:
-            raise AttributeError(f"DataFrame doesn't have column: {date_column}")
+            err = f"DataFrame doesn't have column: {date_column}"
+            logging.error(err, exc_info=True)
 
         if column_where is None and value_where is None:
             data_where = self.data
@@ -68,10 +71,11 @@ class BugCatcherByRule:
             if value_where in self.data[column_where].unique():
                 data_where = self.data[self.data[column_where] == value_where]
             else:
-                error_str = f"Column {column_where} doesn't have value {value_where}"
-                raise AttributeError(error_str)
+                err = f"Column {column_where} doesn't have value {value_where}"
+                logging.error(err, exc_info=True)
         else:
-            raise AttributeError("column_where and value_where must both be specified!!")
+            err = "column_where and value_where must both be specified!!"
+            logging.error(err, exc_info=True)
 
         group_by_list = [
             self.data[date_column].dt.day,
@@ -91,10 +95,10 @@ class BugCatcherByRule:
             'second': group_by_list[:5]}
 
         if group_by_key not in group_by_value:
-            error_str = f"Unknown value: {group_by_key}.\n" \
+            err = f"Unknown value: {group_by_key}.\n" \
                         "'group_by_key can' only take values: " \
                         "day, month, year, hour, minute or second"
-            raise AttributeError(error_str)
+            logging.error(err, exc_info=True)
 
         indexes_by_rule = data_where.groupby(group_by_value[group_by_key])['ID'].apply(list)
 
@@ -112,8 +116,8 @@ class BugCatcherByRule:
             column_where,
             value_where)
 
-        print(f"By this rules you have {len(indexes)} Alerts!")
+        logging.info(f"By this rules you have {len(indexes)} Alerts!")
         for index_list in indexes:
-            print(f"\tALERT!!! Len: {len(index_list)}")
+            logging.info(f"\tALERT!!! Len: {len(index_list)}")
 
         return True
